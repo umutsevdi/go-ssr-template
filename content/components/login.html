@@ -1,0 +1,33 @@
+{{ define "c/login" }}
+<script defer src="/static/js/forms.js"></script>
+<div></div>
+<div>
+    <div>
+        <div>
+            <button></button>
+            <h1>Login</h1>
+            <button></button>
+        </div>
+        <div></div>
+
+        <div>
+            <form id="loginForm">
+                <section>
+                    <label for="text_email">Username</label><br>
+                    <input id="text_email" type="text" placeholder="root" /><br>
+                    <label for="text_ip">Domain</label><br>
+                    <input id="text_ip" type="text" placeholder="127.0.0.1" /><br>
+                </section>
+                <section>
+                    <label for="text_pwd">Password</label><br>
+                    <input id="text_pwd" type="password" placeholder="password" />
+                </section>
+            </form>
+            <section>
+                <button>Cancel</button>
+                <button>Login</button>
+            </section>
+        </div>
+    </div>
+</div>
+{{ end }}
