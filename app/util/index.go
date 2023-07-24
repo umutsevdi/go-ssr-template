@@ -124,7 +124,7 @@ func Ext(url string) string {
 // Indexing function that updates cont.components, cont.pages and cont.static files. Indexes only contain
 // the respective file path.
 func indexContent() {
-	log.Println("INDEX BEGIN   : ", *C.ContentPath)
+	s := time.Now()
 	cont.lock = true
 	if len(cont.components) == 0 {
 		cont.components = make(map[string]FData, 100)
@@ -137,12 +137,14 @@ func indexContent() {
 	}
 
 	indexHtml("/components", "/", &cont.components)
+	defineComponents()
 	indexHtml("/pages", "/", &cont.pages)
-	processTemplate()
+	processTemplates()
 	indexStatic("/", &cont.static)
 	// TODO cleanup function that deletes removed files
 	cont.lock = false
-	log.Println("INDEX COMPLETE: ", *C.ContentPath)
+	e := time.Now()
+	log.Println("Indexing", *C.ContentPath, "was completed in", e.Sub(s).Seconds(), "seconds")
 }
 
 // Recursively traverses through the content/pages directory
@@ -237,8 +239,17 @@ func fetchFData(key, path string, files *map[string]FData) {
 	}
 }
 
-// Replaces template variables on pages with actual components
-func processTemplate() {
+// Inserts the name of the template to be resolved by the engine
+func defineComponents() {
+	for k, v := range cont.components {
+		v.Content = []byte("{{ define \"components" + k + "\" }}" + string(cont.components[k].Content) + "\n{{ end }}")
+	}
+}
+
+// Replaces template variables on pages with actual components.
+//
+// - Only affects {{ template }} calls
+func processTemplates() {
 	comp := make([]string, len(cont.components))
 	i := 0
 

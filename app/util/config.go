@@ -47,7 +47,6 @@ type Config struct {
 // Parses the configuration file at $WEBWATCH_CONFIG or config.json file
 // whichever is available.
 func init() {
-	log.Println("Parsing")
 	path, found := os.LookupEnv("WEBWATCH_CONFIG")
 	if !found || path == "" {
 		path = "config.json"
@@ -61,7 +60,7 @@ func init() {
 
 	json.Unmarshal(file, &C)
 	fillEmptyFields()
-	log.Println("Configuration has been completed. Starting server with:",
+	log.Println("Server has been started with following configurations:",
 		"\n- target:      ", *C.URI, ":", *C.Port,
 		"\n- periodicIndexing:   {enabled: ", *C.PIndexing.Enabled, ", ttl: ", C.PIndexing.Ttl, "}",
 		"\n- staticCache: {enabled: ", *C.StaticCache.Enabled, ", ttl: ", C.StaticCache.Ttl, "}",
